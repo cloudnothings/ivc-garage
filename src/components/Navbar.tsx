@@ -8,10 +8,11 @@ const navigation = [
   { name: 'Home', href: '#', current: true },
   { name: 'Team', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
+  { name: 'Gallery', href: '#', current: false },
   { name: 'Calendar', href: '#', current: false },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 export type NavbarProps = {
