@@ -1,9 +1,17 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
+  const navigation = [
+    { name: 'Home', href: '/', current: true },
+    { name: 'Team', href: '/team', current: false },
+    { name: 'Projects', href: '#', current: false },
+    { name: 'Gallery', href: '#', current: false },
+    { name: 'Calendar', href: '#', current: false },
+  ]
   const { data: sessionData } = useSession();
   return (
     <>
@@ -15,7 +23,7 @@ const Home: NextPage = () => {
       <main>
         <div className="bg-cover bg-center h-screen"
           style={{ backgroundImage: `url('/pagani.jpg')` }}>
-          <Navbar image={sessionData?.user?.image} />
+          <Navbar image={sessionData?.user?.image} navigation={navigation} />
           <main className="max-w-prose px-4 py-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28 border-hidden backdrop-blur rounded-lg">
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
@@ -28,20 +36,18 @@ const Home: NextPage = () => {
               </p>
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <a
-                    href="#"
-                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 md:py-4 md:px-10 md:text-lg"
-                  >
-                    Coming Soon
-                  </a>
+                  <Link href="#">
+                    <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-red-900 px-8 py-3 text-base font-medium text-white hover:bg-red-700 md:py-4 md:px-10 md:text-lg">
+                      Coming Soon
+                    </a>
+                  </Link>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <a
-                    href="#"
-                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 md:py-4 md:px-10 md:text-lg"
-                  >
-                    Learn More
-                  </a>
+                  <Link href="#">
+                    <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-3 text-base font-medium text-red-900 hover:bg-indigo-200 md:py-4 md:px-10 md:text-lg">
+                      Learn More
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>
