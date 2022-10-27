@@ -40,13 +40,13 @@ export default function Navbar({ image }: NavbarProps) {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="block h-8 w-auto lg:hidden"
-                    src="/ivc.jpg"
+                    src="/white-logo.svg"
                     alt="IVC Garage"
                   />
                   <img
                     className="hidden h-8 w-auto lg:block"
-                    src="/ivc.jpg"
-                    alt="Your Company"
+                    src="/white-logo.svg"
+                    alt="IVC Garage"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
