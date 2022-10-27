@@ -92,7 +92,7 @@ export default function Navbar({ image }: NavbarProps) {
                   ) : (
                     <a
                       className={classNames(
-                        'flex text-sm bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium sm:ml-6 sm:block hover:bg-gray-700'
+                        'flex text-sm bg-gray-900 text-white px-3 py-2 cursor-pointer rounded-md text-sm font-medium sm:ml-6 sm:block hover:bg-gray-700'
                       )}
                       onClick={() => signIn('discord')}
                     >Log in</a>)}
@@ -130,7 +130,7 @@ export default function Navbar({ image }: NavbarProps) {
                         {({ active }) => (
                           <a
                             onClick={() => signOut()}
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                           >
                             Sign out
                           </a>
