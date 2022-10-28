@@ -20,7 +20,7 @@ const Team: NextPage = () => {
       <link rel="icon" href="/favicon.ico" />
     </Head>
       <Navbar image={sessionData?.user?.image} navigation={navigation} />
-      <section className="py-36 bg-black overflow-hidden">
+      <section className="py-8 bg-black overflow-hidden">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap md:max-w-xl lg:max-w-7xl mx-auto">
             <div className="w-full md:w-1/2">

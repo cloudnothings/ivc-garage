@@ -27,12 +27,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @db.Text
-  access_token      String?  @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -47,14 +47,65 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Profile {
+  id             Int     @id @default(autoincrement())
+  user           User    @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail      String  @unique // relation scalar field (used in the `@relation` attribute above)
+  displayName    String?
+  profilePicture String?
+  profileBanner  String?
+  about          String?
+  publicEmail    String?
+}
+
+model Car {
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail   String     @unique // relation scalar field (used in the `@relation` attribute above)
+  primary     Boolean    @default(false)
+  nickname    String?
+  make        String?
+  model       String?
+  year        Int?
+  color       String?
+  image       String?
+  description String?
+  CarImage    CarImage[]
+}
+
+model CarImage {
+  id        Int      @id @default(autoincrement())
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  carId     Int // relation scalar field (used in the `@relation` attribute above)
+  image     String?
+  createdAt DateTime @default(now())
+}
+
+model SocialPlatforms {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String  @unique // relation scalar field (used in the `@relation` attribute above)
+  twitter   String?
+  instagram String?
+  linkedin  String?
+  github    String?
+  youtube   String?
+  tiktok    String?
+  twitch    String?
+  spotify   String?
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  Profile         Profile?
+  SocialPlatforms SocialPlatforms?
+  Car             Car?
 }
 
 model VerificationToken {

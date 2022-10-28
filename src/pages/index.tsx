@@ -13,6 +13,7 @@ const Home: NextPage = () => {
     { name: 'Calendar', href: '#', current: false },
   ]
   const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
