@@ -13,7 +13,7 @@ export const profileRouter = router({
       include: {
         Profile: true,
         SocialPlatforms: true,
-        Car: true,
+        Cars: true,
       },
     });
   }),
