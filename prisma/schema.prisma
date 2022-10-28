@@ -52,6 +52,11 @@ model Profile {
   user           User    @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail      String  @unique // relation scalar field (used in the `@relation` attribute above)
   displayName    String?
+  firstName      String?
+  lastName       String?
+  allowMentions  Boolean @default(true)
+  allowComments  Boolean @default(true)
+  privateProfile Boolean @default(false)
   profilePicture String?
   profileBanner  String?
   about          String?

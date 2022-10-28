@@ -3,14 +3,16 @@ import { useSession } from "next-auth/react"
 import Head from "next/head"
 import EditProfile from "../../components/EditProfile"
 import Navbar from "../../components/Navbar"
+import { trpc } from "../../utils/trpc"
 
 const ProfileEditPage: NextPage = () => {
-  const { data: sessionData, status } = useSession()
-  if (status === "loading") {
+  const { data, isLoading, isError } = trpc.user.getMyProfile.useQuery()
+
+  if (isLoading) {
     return <div>Loading...</div>
   }
-  if (status === "unauthenticated") {
-    return <div>You must log in to do that.</div>
+  if (isError) {
+    return <div>You must be logged in to do this.</div>
   }
 
   const navigation = [
@@ -21,6 +23,13 @@ const ProfileEditPage: NextPage = () => {
     { name: 'Calendar', href: '/calendar', current: false },
   ]
 
+  const user = {
+    id: data?.id,
+    name: data?.name,
+    email: data?.email,
+    image: data?.image,
+    slug: data?.slug,
+  }
 
   return <>
     <Head>
@@ -28,8 +37,8 @@ const ProfileEditPage: NextPage = () => {
       <meta name="description" content="IVC Garage Gallery" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <Navbar image={sessionData?.user?.image} navigation={navigation} />
-    <EditProfile />
+    <Navbar image={user?.image} navigation={navigation} />
+    <EditProfile user={user} profile={data?.Profile} socials={data?.SocialPlatforms} />
   </>
 }
 

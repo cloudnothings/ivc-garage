@@ -8,14 +8,8 @@ import {
   SquaresPlusIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
+import { Profile, SocialPlatforms } from '@prisma/client'
 
-const user = {
-  name: 'Debbie Lewis',
-  handle: 'deblewis',
-  email: 'debbielewis@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=320&h=320&q=80',
-}
 
 const subNavigation = [
   { name: 'Profile', href: '#', icon: UserCircleIcon, current: true },
@@ -23,14 +17,26 @@ const subNavigation = [
   { name: 'Password', href: '#', icon: KeyIcon, current: false },
   { name: 'Notifications', href: '#', icon: BellIcon, current: false },
   { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
+  { name: 'Integrations (Soon)', href: '#', icon: SquaresPlusIcon, current: false },
 ]
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function EditProfile() {
+export interface EditProfileProps {
+  user: {
+    id: string | undefined | null
+    name: string | undefined | null
+    email: string | undefined | null
+    image: string | undefined | null
+    slug: string | undefined | null
+  }
+  profile: Profile | undefined | null
+  socials: SocialPlatforms | undefined | null
+}
+
+export default function EditProfile({ user, profile, socials }: EditProfileProps) {
   const [availableToHire, setAvailableToHire] = useState(true)
   const [privateAccount, setPrivateAccount] = useState(false)
   const [allowCommenting, setAllowCommenting] = useState(true)
@@ -96,7 +102,6 @@ export default function EditProfile() {
                           placeholder='cloud'
                           autoComplete="username"
                           className="bg-black block w-full caret-white text-white min-w-0 flex-grow rounded-none rounded-r-md border-[#333] focus:border-[#555] focus:ring-[#555] sm:text-sm"
-                          defaultValue={user.handle}
                         />
                       </div>
                     </div>
@@ -129,7 +134,7 @@ export default function EditProfile() {
                           className="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
                           aria-hidden="true"
                         >
-                          <img className="h-full w-full rounded-full" src={user.imageUrl} alt="" />
+                          <img className="h-full w-full rounded-full" src={profile?.profilePicture ? profile?.profilePicture : user.image!} alt="" />
                         </div>
                         <div className="ml-5 rounded-md shadow-sm">
                           <div className="group relative flex items-center justify-center rounded-md border border-[#333] py-2 px-3 focus-within:ring-2 focus-within:ring-[#555] focus-within:ring-offset-2 hover:bg-[#222]">
@@ -151,7 +156,7 @@ export default function EditProfile() {
                       </div>
                     </div>
                     <div className="relative hidden overflow-hidden rounded-full lg:block">
-                      <img className="relative h-40 w-40 rounded-full" src={user.imageUrl} alt="" />
+                      <img className="relative h-40 w-40 rounded-full" src={profile?.profilePicture ? profile?.profilePicture : user.image!} alt="" />
                       <label
                         htmlFor="desktop-user-photo"
                         className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
@@ -196,17 +201,18 @@ export default function EditProfile() {
                     />
                   </div>
 
-                  {/* <div className="col-span-12">
+                  <div className="col-span-12">
                     <label htmlFor="url" className="block text-sm font-medium text-white">
-                      URL
+                      Email Address
                     </label>
                     <input
                       type="text"
-                      name="url"
-                      id="url"
+                      name="email"
+                      id="email"
                       className="mt-1 block bg-black caret-white text-white w-full rounded-md border border-[#333] py-2 px-3 shadow-sm focus:border-[#555] focus:outline-none focus:ring-[#555] sm:text-sm"
+                      defaultValue={profile?.publicEmail ? profile?.publicEmail : ''}
                     />
-                  </div> */}
+                  </div>
 
                   {/* <div className="col-span-12 sm:col-span-6">
                     <label htmlFor="company" className="block text-sm font-medium text-white">
