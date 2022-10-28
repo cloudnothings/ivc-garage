@@ -9,10 +9,11 @@ const Team: NextPage = () => {
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'Team', href: '/team', current: true },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Gallery', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Projects', href: '/projects', current: false },
+    { name: 'Gallery', href: '/gallery', current: false },
+    { name: 'Calendar', href: '/calendar', current: false },
   ]
+
   return (
     <><Head>
       <title>IVC Garage</title>

@@ -98,6 +98,7 @@ model SocialPlatforms {
 model User {
   id              String           @id @default(cuid())
   name            String?
+  slug            String?          @unique @default(cuid())
   email           String?          @unique
   emailVerified   DateTime?
   image           String?
@@ -105,7 +106,7 @@ model User {
   sessions        Session[]
   Profile         Profile?
   SocialPlatforms SocialPlatforms?
-  Car             Car?
+  Cars            Car[]
 }
 
 model VerificationToken {

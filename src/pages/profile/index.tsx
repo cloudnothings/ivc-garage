@@ -12,9 +12,9 @@ const ProfilePage: NextPage = () => {
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'Team', href: '/team', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Gallery', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Projects', href: '/projects', current: false },
+    { name: 'Gallery', href: '/gallery', current: false },
+    { name: 'Calendar', href: '/calendar', current: false },
   ]
 
   if (status === "unauthenticated") {
@@ -30,7 +30,7 @@ const ProfilePage: NextPage = () => {
     id: 1,
     displayName: sessionData?.user?.name || '',
     profilePicture: sessionData?.user?.image || 'jett.webp',
-    profileBanner: 'logo.svg',
+    profileBanner: 'white-logo.svg',
     about: 'Creator of this club and website',
     publicEmail: 'carlos@rangel.us',
   }

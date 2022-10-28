@@ -4,6 +4,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
+import Image from 'next/future/image'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -32,31 +33,44 @@ export default function Navbar({ image, navigation }: NavbarProps) {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="/white-logo.svg"
-                    alt="IVC Garage"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="/white-logo.svg"
-                    alt="IVC Garage"
-                  />
+                  <Link href='/'>
+                    <a>
+                      <Image
+                        className="block h-8 w-auto lg:hidden"
+                        src="/white-logo.svg"
+                        alt="IVC Garage"
+                        width={100}
+                        height={100}
+                      />
+                    </a>
+                  </Link>
+                  <Link href='/'>
+                    <a>
+                      <Image
+                        className="hidden h-8 w-auto lg:block"
+                        src="/white-logo.svg"
+                        alt="IVC Garage"
+                        width={100}
+                        height={100}
+                      />
+                    </a>
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex sm:space-x-2 md:space-x-4">
                     {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
-                      </a>
+                      <Link key={item.name} href={item.href}>
+                        <a
+                          href={item.href}
+                          className={classNames(
+                            item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium'
+                          )}
+                          aria-current={item.current ? 'page' : undefined}
+                        >
+                          {item.name}
+                        </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -111,7 +125,7 @@ export default function Navbar({ image, navigation }: NavbarProps) {
                           </Link>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
@@ -120,7 +134,7 @@ export default function Navbar({ image, navigation }: NavbarProps) {
                             Settings
                           </a>
                         )}
-                      </Menu.Item>
+                      </Menu.Item> */}
                       <Menu.Item>
                         {({ active }) => (
                           <a

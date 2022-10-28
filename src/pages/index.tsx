@@ -8,9 +8,9 @@ const Home: NextPage = () => {
   const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'Team', href: '/team', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Gallery', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Projects', href: '/projects', current: false },
+    { name: 'Gallery', href: '/gallery', current: false },
+    { name: 'Calendar', href: '/calendar', current: false },
   ]
   const { data: sessionData } = useSession();
 
