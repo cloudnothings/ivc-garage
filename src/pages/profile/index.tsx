@@ -23,8 +23,8 @@ const ProfilePage: NextPage = () => {
 
   const tabs = [
     { name: 'Profile', href: '#', current: true },
-    { name: 'Calendar', href: '#', current: false },
-    { name: 'Recognition', href: '#', current: false },
+    { name: 'Cars', href: '#', current: false },
+    { name: 'Gallery', href: '#', current: false },
   ]
   const profile = {
     id: 1,
@@ -47,7 +47,7 @@ const ProfilePage: NextPage = () => {
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     }, {
       id: 2,
-      nickname: 'Lightnin McQueen',
+      nickname: 'Lightning McQueen',
       year: 1999,
       make: 'Toyota',
       model: 'Supra',

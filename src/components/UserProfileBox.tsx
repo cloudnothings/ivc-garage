@@ -136,10 +136,8 @@ export default function UserProfileBox({ tabs, profile, socialPlatforms, cars }:
                     </div>
                   </div>
                 </div>
-
                 {/* Tabs */}
                 <div className="mt-6 sm:mt-2 2xl:mt-5">
-
                   <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                     <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                       {tabs.map((tab) => (
@@ -160,16 +158,16 @@ export default function UserProfileBox({ tabs, profile, socialPlatforms, cars }:
                     </nav>
                   </div>
                 </div>
+
                 {/* Description list */}
                 <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">About</dt>
-                      <dd className="mt-1 max-w-prose space-y-5 text-sm text-[#999999]" />
-                      <p>{profile.about}</p>
-                    </div>
-                  </dl>
+                  {profile.about && (
+                    <>
+                      <div className="text-white font-medium text-md">About</div>
+                      <div className="font-medium text-[#999999]">{profile.about}</div>
+                    </>)}
                 </div>
+
                 {/* Favorite Builds list */}
                 <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
                   <h2 className="text-sm font-medium text-gray-500">Favorite Builds</h2>
