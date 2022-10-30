@@ -57,7 +57,6 @@ model Profile {
   allowMentions  Boolean @default(true)
   allowComments  Boolean @default(true)
   privateProfile Boolean @default(false)
-  profilePicture String?
   profileBanner  String?
   about          String?
   publicEmail    String?
@@ -107,6 +106,7 @@ model User {
   email           String?          @unique
   emailVerified   DateTime?
   image           String?
+  profilePicture  String?
   accounts        Account[]
   sessions        Session[]
   Profile         Profile?

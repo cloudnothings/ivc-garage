@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Navbar from "../../components/Navbar";
 import UserProfileBox from "../../components/UserProfileBox";
 const ProfilePage: NextPage = () => {
@@ -57,6 +58,11 @@ const ProfilePage: NextPage = () => {
     },
   ]
   return (<>
+    <Head>
+      <title>My Profile</title>
+      <meta name="description" content="My Profile" />
+      <link rel="icon" href="/white-logo.svg" />
+    </Head>
     <Navbar image={sessionData?.user?.image} navigation={navigation} />
     <UserProfileBox tabs={tabs} cars={cars} profile={profile} />
   </>)

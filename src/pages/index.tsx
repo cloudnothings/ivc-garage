@@ -19,7 +19,7 @@ const Home: NextPage = () => {
       <Head>
         <title>IVC Garage</title>
         <meta name="description" content="IVC Garage" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/white-logo.svg" />
       </Head>
       <main>
         <div className="bg-cover bg-center h-screen"

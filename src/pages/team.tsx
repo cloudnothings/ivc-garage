@@ -16,9 +16,9 @@ const Team: NextPage = () => {
 
   return (
     <><Head>
-      <title>IVC Garage</title>
-      <meta name="description" content="IVC Garage" />
-      <link rel="icon" href="/favicon.ico" />
+      <title>IVC Garage Team</title>
+      <meta name="description" content="IVC Garage Team" />
+      <link rel="icon" href="/white-logo.svg" />
     </Head>
       <Navbar image={sessionData?.user?.image} navigation={navigation} />
       <section className="py-8 bg-black overflow-hidden">

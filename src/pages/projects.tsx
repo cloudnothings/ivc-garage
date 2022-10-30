@@ -1,7 +1,6 @@
 import { NextPage } from "next"
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 export const ProjectsPage: NextPage = () => {
@@ -19,7 +18,7 @@ export const ProjectsPage: NextPage = () => {
       <Head>
         <title>IVC Garage Projects</title>
         <meta name="description" content="IVC Garage Projects" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/white-logo.svg" />
       </Head>
       <main>
         <div className="bg-cover bg-center h-screen"

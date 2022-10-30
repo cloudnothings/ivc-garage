@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import {
   BellIcon,
@@ -9,6 +9,7 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Profile, SocialPlatforms } from '@prisma/client'
+import Link from 'next/link'
 
 
 const subNavigation = [
@@ -27,21 +28,29 @@ function classNames(...classes: any[]) {
 export interface EditProfileProps {
   user: {
     id: string | undefined | null
-    name: string | undefined | null
-    email: string | undefined | null
     image: string | undefined | null
     slug: string | undefined | null
+    profilePicture: string | undefined | null
   }
   profile: Profile | undefined | null
-  socials: SocialPlatforms | undefined | null
 }
 
-export default function EditProfile({ user, profile, socials }: EditProfileProps) {
-  const [availableToHire, setAvailableToHire] = useState(true)
+export default function EditProfile({ user, profile }: EditProfileProps) {
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log(e)
+  }
+
+  // Edit User Profile Fields ////////////////////////////////
+  const [slug, setSlug] = useState(user?.slug || undefined)
+  const [about, setAbout] = useState(profile?.about || undefined)
+  const [firstName, setFirstName] = useState(profile?.firstName || undefined)
+  const [lastName, setLastName] = useState(profile?.lastName || undefined)
+  const [publicEmail, setPublicEmail] = useState(profile?.publicEmail || undefined)
   const [privateAccount, setPrivateAccount] = useState(false)
   const [allowCommenting, setAllowCommenting] = useState(true)
   const [allowMentions, setAllowMentions] = useState(true)
-
+  ////////////////////////////////////////////////////////////
   return (
     <>
       <div className="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16">
@@ -76,13 +85,13 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
               </nav>
             </aside>
 
-            <form className="divide-y divide-[#555] lg:col-span-9" action="#" method="POST">
+            <form className="divide-y divide-[#555] lg:col-span-9" onSubmit={submitHandler}>
               {/* Profile section */}
               <div className="py-6 px-4 sm:p-6 lg:pb-8">
                 <div>
                   <h2 className="text-lg font-medium leading-6 text-white">Profile</h2>
                   <p className="mt-1 text-sm text-[#999]">
-                    This information will be displayed publicly so be careful what you share.
+                    {"This information will be displayed publicly so be careful what you share."}
                   </p>
                 </div>
                 <div className="mt-6 flex flex-col lg:flex-row">
@@ -97,10 +106,8 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                         </span>
                         <input
                           type="text"
-                          name="username"
-                          id="username"
-                          placeholder='cloud'
-                          autoComplete="username"
+                          value={slug}
+                          onChange={(e) => setSlug(e.target.value)}
                           className="bg-black block w-full caret-white text-white min-w-0 flex-grow rounded-none rounded-r-md border-[#333] focus:border-[#555] focus:ring-[#555] sm:text-sm"
                         />
                       </div>
@@ -112,11 +119,10 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                       </label>
                       <div className="mt-1">
                         <textarea
-                          id="about"
-                          name="about"
+                          value={about}
+                          onChange={(e) => setAbout(e.target.value)}
                           rows={3}
                           className="mt-1 bg-black block caret-white text-white w-full rounded-md border-[#333] shadow-sm focus:border-[#555] focus:ring-[#555] sm:text-sm"
-                          defaultValue={''}
                         />
                       </div>
                       <p className="mt-2 text-sm text-[#999]">
@@ -134,7 +140,7 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                           className="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
                           aria-hidden="true"
                         >
-                          <img className="h-full w-full rounded-full" src={profile?.profilePicture ? profile?.profilePicture : user.image!} alt="" />
+                          <img className="h-full w-full rounded-full" src={user?.profilePicture ?? user.image!} alt="" />
                         </div>
                         <div className="ml-5 rounded-md shadow-sm">
                           <div className="group relative flex items-center justify-center rounded-md border border-[#333] py-2 px-3 focus-within:ring-2 focus-within:ring-[#555] focus-within:ring-offset-2 hover:bg-[#222]">
@@ -156,7 +162,7 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                       </div>
                     </div>
                     <div className="relative hidden overflow-hidden rounded-full lg:block">
-                      <img className="relative h-40 w-40 rounded-full" src={profile?.profilePicture ? profile?.profilePicture : user.image!} alt="" />
+                      <img className="relative h-40 w-40 rounded-full" src={user?.profilePicture ?? user.image!} alt="" />
                       <label
                         htmlFor="desktop-user-photo"
                         className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
@@ -181,8 +187,8 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                     </label>
                     <input
                       type="text"
-                      name="first-name"
-                      id="first-name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       autoComplete="given-name"
                       className="mt-1 block w-full bg-black text-white caret-white rounded-md border border-[#333] py-2 px-3 shadow-sm focus:border-[#555] focus:outline-none focus:ring-[#555] sm:text-sm"
                     />
@@ -194,8 +200,8 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                     </label>
                     <input
                       type="text"
-                      name="last-name"
-                      id="last-name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       autoComplete="family-name"
                       className="mt-1 block w-full bg-black caret-white text-white rounded-md border border-[#333] py-2 px-3 shadow-sm focus:border-[#555] focus:outline-none focus:ring-[#555] sm:text-sm"
                     />
@@ -207,25 +213,11 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                     </label>
                     <input
                       type="text"
-                      name="email"
-                      id="email"
+                      value={publicEmail}
+                      onChange={(e) => setPublicEmail(e.target.value)}
                       className="mt-1 block bg-black caret-white text-white w-full rounded-md border border-[#333] py-2 px-3 shadow-sm focus:border-[#555] focus:outline-none focus:ring-[#555] sm:text-sm"
-                      defaultValue={profile?.publicEmail ? profile?.publicEmail : ''}
                     />
                   </div>
-
-                  {/* <div className="col-span-12 sm:col-span-6">
-                    <label htmlFor="company" className="block text-sm font-medium text-white">
-                      Company
-                    </label>
-                    <input
-                      type="text"
-                      name="company"
-                      id="company"
-                      autoComplete="organization"
-                      className="mt-1 block w-full rounded-md bg-black caret-white text-white border border-[#333] py-2 px-3 shadow-sm focus:border-[#555] focus:outline-none focus:ring-[#555] sm:text-sm"
-                    />
-                  </div> */}
                 </div>
               </div>
 
@@ -239,32 +231,6 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                     </p>
                   </div>
                   <ul role="list" className="mt-2 divide-y divide-[#555]">
-                    {/* <Switch.Group as="li" className="flex items-center justify-between py-4">
-                      <div className="flex flex-col">
-                        <Switch.Label as="p" className="text-sm font-medium text-white" passive>
-                          Available to hire
-                        </Switch.Label>
-                        <Switch.Description className="text-sm text-[#999]">
-                          Nulla amet tempus sit accumsan. Aliquet turpis sed sit lacinia.
-                        </Switch.Description>
-                      </div>
-                      <Switch
-                        checked={availableToHire}
-                        onChange={setAvailableToHire}
-                        className={classNames(
-                          availableToHire ? 'bg-teal-500' : 'bg-[#555]',
-                          'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none'
-                        )}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            availableToHire ? 'translate-x-5' : 'translate-x-0',
-                            'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                          )}
-                        />
-                      </Switch>
-                    </Switch.Group> */}
                     <Switch.Group as="li" className="flex items-center justify-between py-4">
                       <div className="flex flex-col">
                         <Switch.Label as="p" className="text-sm font-medium text-white" passive>
@@ -346,12 +312,14 @@ export default function EditProfile({ user, profile, socials }: EditProfileProps
                   </ul>
                 </div>
                 <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border text-white border-[#333] bg-black py-2 px-4 text-sm font-medium shadow-sm hover:bg-[#333] focus:outline-none"
-                  >
-                    Cancel
-                  </button>
+                  <Link href={'/'}>
+                    <a
+                      type="button"
+                      className="inline-flex cursor-pointer justify-center rounded-md border text-white border-[#333] bg-black py-2 px-4 text-sm font-medium shadow-sm hover:bg-[#333] focus:outline-none"
+                    >
+                      Cancel
+                    </a>
+                  </Link>
                   <button
                     type="submit"
                     className="ml-5 inline-flex justify-center rounded-md border border-transparent bg-sky-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-800 focus:outline-none "
