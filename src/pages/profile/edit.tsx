@@ -1,6 +1,8 @@
+import { Profile, User } from "@prisma/client"
 import { NextPage } from "next"
 import { useSession } from "next-auth/react"
 import Head from "next/head"
+import { useState } from "react"
 import EditProfile from "../../components/EditProfile"
 import Navbar from "../../components/Navbar"
 import Unauthenticated from "../../components/Unauthenticated"
@@ -15,8 +17,17 @@ const ProfileEditPage: NextPage = () => {
     { name: 'Calendar', href: '/calendar', current: false },
   ]
   const { status } = useSession()
-  const { data } = trpc.user.getEditProfileInfo.useQuery(undefined, {
+  const [user, setUser] = useState<User>()
+  const { isSuccess } = trpc.user.getMyUser.useQuery(undefined, {
     enabled: status === 'authenticated',
+    onSuccess: setUser,
+    refetchOnWindowFocus: false,
+  })
+
+  const [profile, setProfile] = useState<Profile>()
+  trpc.user.getMyProfile.useQuery(undefined, {
+    enabled: !!isSuccess,
+    onSuccess: setProfile,
     refetchOnWindowFocus: false,
   })
 
@@ -27,23 +38,18 @@ const ProfileEditPage: NextPage = () => {
   if (status === "unauthenticated") {
     return <Unauthenticated navigation={navigation} />
   }
-
-  const user = {
-    id: data?.id,
-    image: data?.image,
-    profilePicture: data?.profilePicture,
-    slug: data?.slug,
+  if (user && profile) {
+    return <>
+      <Head>
+        <title>Edit Profile</title>
+        <meta name="description" content="Edit profile" />
+        <link rel="icon" href="/white-logo.svg" />
+      </Head>
+      <Navbar image={user?.image} navigation={navigation} />
+      <EditProfile user={user} profile={profile} />
+    </>
   }
-
-  return <>
-    <Head>
-      <title>Edit Profile</title>
-      <meta name="description" content="Edit profile" />
-      <link rel="icon" href="/white-logo.svg" />
-    </Head>
-    <Navbar image={user.image} navigation={navigation} />
-    <EditProfile user={user} profile={data?.Profile} />
-  </>
+  return <div>Something went wrong</div>
 }
 
 export default ProfileEditPage

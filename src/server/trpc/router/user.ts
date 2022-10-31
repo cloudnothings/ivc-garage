@@ -2,21 +2,34 @@ import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 
 export const userRouter = router({
-  getEditProfileInfo: protectedProcedure.query(({ ctx }) => {
+  getMyUser: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.user.findUnique({
       where: {
-        id: ctx.session.user.id,
-      },
-      select: {
-        id: true,
-        slug: true,
-        image: true,
-        profilePicture: true,
-        Profile: true,
-      },
+        id: ctx.session.user.id
+      }
     });
   }),
-  updateProfile: protectedProcedure
+  getMyProfile: protectedProcedure.query(async ({ ctx }) => {
+    // Get my profile if it exists, otherwise create it
+    const profile = await ctx.prisma.profile.findUnique({
+      where: {
+        userId: ctx.session.user.id
+      }
+    });
+    if (profile) {
+      return profile;
+    }
+    return ctx.prisma.profile.create({
+      data: {
+        user: {
+          connect: {
+            id: ctx.session.user.id
+          }
+        }
+      }
+    });
+  }),
+  editProfile: protectedProcedure
     .input(z.object({
       slug: z.string().optional(),
       profilePicture: z.string().optional(),
@@ -31,13 +44,13 @@ export const userRouter = router({
       }),
     }))
     .mutation(async ({ ctx, input }) => {
-    await ctx.prisma.user.update({
+      await ctx.prisma.user.update({
       where: {
         id: ctx.session.user.id,
       },
       data: {
         slug: input.slug ?? undefined,
-        Profile: {
+        profile: {
           update: {
             about: input.profile.about ?? undefined,
             firstName: input.profile.firstName ?? undefined,
@@ -50,18 +63,5 @@ export const userRouter = router({
         },
       },
     })
-  }),
-  getMyProfile: protectedProcedure.query(({ ctx }) => {
-    // TODO: return the user's profile
-    return ctx.prisma.user.findUnique({
-      where: {
-        id: ctx.session.user.id,
-      },
-      include: {
-        Profile: true,
-        SocialPlatforms: true,
-        Cars: true,
-      },
-    });
   }),
 });

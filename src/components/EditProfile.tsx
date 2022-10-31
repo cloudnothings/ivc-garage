@@ -8,8 +8,9 @@ import {
   SquaresPlusIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
-import { Profile, SocialPlatforms } from '@prisma/client'
+import { Profile, SocialPlatforms, User } from '@prisma/client'
 import Link from 'next/link'
+import { trpc } from '../utils/trpc'
 
 
 const subNavigation = [
@@ -26,30 +27,41 @@ function classNames(...classes: any[]) {
 }
 
 export interface EditProfileProps {
-  user: {
-    id: string | undefined | null
-    image: string | undefined | null
-    slug: string | undefined | null
-    profilePicture: string | undefined | null
-  }
-  profile: Profile | undefined | null
+  user: User
+  profile: Profile
 }
 
 export default function EditProfile({ user, profile }: EditProfileProps) {
-  const submitHandler = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log(e)
-  }
+  const editProfileMutator = trpc.user.editProfile.useMutation()
 
   // Edit User Profile Fields ////////////////////////////////
-  const [slug, setSlug] = useState(user?.slug || undefined)
-  const [about, setAbout] = useState(profile?.about || undefined)
-  const [firstName, setFirstName] = useState(profile?.firstName || undefined)
-  const [lastName, setLastName] = useState(profile?.lastName || undefined)
-  const [publicEmail, setPublicEmail] = useState(profile?.publicEmail || undefined)
-  const [privateAccount, setPrivateAccount] = useState(false)
-  const [allowCommenting, setAllowCommenting] = useState(true)
-  const [allowMentions, setAllowMentions] = useState(true)
+  const [slug, setSlug] = useState<string>(user?.slug || '')
+  const [about, setAbout] = useState<string>(profile?.about || '')
+  const [firstName, setFirstName] = useState<string>(profile?.firstName || '')
+  const [profilePicture, setProfilePicture] = useState<string>(user.profilePicture || '')
+  const [lastName, setLastName] = useState<string>(profile?.lastName || '')
+  const [publicEmail, setPublicEmail] = useState<string>(profile?.publicEmail || '')
+  const [privateProfile, setPrivateProfile] = useState<boolean>(profile?.privateProfile || false)
+  const [allowComments, setAllowComments] = useState<boolean>(profile?.allowComments || true)
+  const [allowMentions, setAllowMentions] = useState<boolean>(profile?.allowMentions || true)
+
+  const editProfileSubmitHandler = (e: React.FormEvent) => {
+    e.preventDefault()
+    editProfileMutator.mutateAsync({
+      slug: slug,
+      profilePicture: profilePicture,
+      profile: {
+        about: about,
+        firstName: firstName,
+        lastName: lastName,
+        publicEmail: publicEmail,
+        privateProfile: privateProfile,
+        allowComments: allowComments,
+        allowMentions: allowMentions,
+      },
+    }
+    )
+  }
   ////////////////////////////////////////////////////////////
   return (
     <>
@@ -85,7 +97,7 @@ export default function EditProfile({ user, profile }: EditProfileProps) {
               </nav>
             </aside>
 
-            <form className="divide-y divide-[#555] lg:col-span-9" onSubmit={submitHandler}>
+            <form className="divide-y divide-[#555] lg:col-span-9" onSubmit={editProfileSubmitHandler}>
               {/* Profile section */}
               <div className="py-6 px-4 sm:p-6 lg:pb-8">
                 <div>
@@ -241,17 +253,17 @@ export default function EditProfile({ user, profile }: EditProfileProps) {
                         </Switch.Description>
                       </div>
                       <Switch
-                        checked={privateAccount}
-                        onChange={setPrivateAccount}
+                        checked={privateProfile}
+                        onChange={setPrivateProfile}
                         className={classNames(
-                          privateAccount ? 'bg-teal-500' : 'bg-[#555]',
+                          privateProfile ? 'bg-teal-500' : 'bg-[#555]',
                           'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none'
                         )}
                       >
                         <span
                           aria-hidden="true"
                           className={classNames(
-                            privateAccount ? 'translate-x-5' : 'translate-x-0',
+                            privateProfile ? 'translate-x-5' : 'translate-x-0',
                             'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                           )}
                         />
@@ -267,17 +279,17 @@ export default function EditProfile({ user, profile }: EditProfileProps) {
                         </Switch.Description>
                       </div>
                       <Switch
-                        checked={allowCommenting}
-                        onChange={setAllowCommenting}
+                        checked={allowComments}
+                        onChange={setAllowComments}
                         className={classNames(
-                          allowCommenting ? 'bg-teal-500' : 'bg-[#555]',
+                          allowComments ? 'bg-teal-500' : 'bg-[#555]',
                           'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none'
                         )}
                       >
                         <span
                           aria-hidden="true"
                           className={classNames(
-                            allowCommenting ? 'translate-x-5' : 'translate-x-0',
+                            allowComments ? 'translate-x-5' : 'translate-x-0',
                             'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                           )}
                         />
