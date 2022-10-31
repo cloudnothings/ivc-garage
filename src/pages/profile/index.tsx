@@ -1,6 +1,5 @@
-import { Car, Profile, User } from "@prisma/client";
+import { Car, Profile, SocialPlatforms, User } from "@prisma/client";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
@@ -15,9 +14,21 @@ const ProfilePage: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
+  const [discord, setDiscord] = useState<string>();
+  trpc.user.getMyDiscordId.useQuery(undefined, {
+    onSuccess: setDiscord,
+    refetchOnWindowFocus: false,
+  });
+
   const [profile, setProfile] = useState<Profile>();
   trpc.user.getMyProfile.useQuery(undefined, {
     onSuccess: setProfile,
+    refetchOnWindowFocus: false,
+  });
+
+  const [socialPlatforms, setSocialPlatforms] = useState<SocialPlatforms>();
+  trpc.user.getMySocials.useQuery(undefined, {
+    onSuccess: setSocialPlatforms,
     refetchOnWindowFocus: false,
   });
 
@@ -56,7 +67,7 @@ const ProfilePage: NextPage = () => {
     return <Unauthenticated navigation={navigation} />
   }
 
-  if (user && profile) {
+  if (!!user && !!profile && !!socialPlatforms && !!cars && !!discord) {
     return (
       <>
         <Head>
@@ -65,7 +76,7 @@ const ProfilePage: NextPage = () => {
           <link rel="icon" href="/white-logo.svg" />
         </Head>
         <Navbar image={user?.image} navigation={navigation} />
-        <UserProfileBox tabs={tabs} cars={cars} profile={profile} user={user} setTabs={changeActiveTab} />
+        <UserProfileBox tabs={tabs} cars={cars} profile={profile} user={user} setTabs={changeActiveTab} socialPlatforms={socialPlatforms} discordId={discord} />
       </>)
   }
   return <div>Something went wrong</div>

@@ -86,11 +86,9 @@ model CarImage {
 }
 
 model SocialPlatforms {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String  @unique // relation scalar field (used in the `@relation` attribute above)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @unique
   twitter   String?
-  discord   String?
   instagram String?
   linkedin  String?
   github    String?

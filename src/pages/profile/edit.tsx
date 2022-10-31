@@ -1,4 +1,4 @@
-import { Profile, User } from "@prisma/client"
+import { Profile, SocialPlatforms, User } from "@prisma/client"
 import { NextPage } from "next"
 import { useSession } from "next-auth/react"
 import Head from "next/head"
@@ -31,6 +31,12 @@ const ProfileEditPage: NextPage = () => {
     refetchOnWindowFocus: false,
   })
 
+  const [socialPlatforms, setSocialPlatforms] = useState<SocialPlatforms>();
+  trpc.user.getMySocials.useQuery(undefined, {
+    onSuccess: setSocialPlatforms,
+    refetchOnWindowFocus: false,
+  });
+
   if (status === "loading") {
     return <div className="text-white">Loading...</div>
   }
@@ -38,7 +44,7 @@ const ProfileEditPage: NextPage = () => {
   if (status === "unauthenticated") {
     return <Unauthenticated navigation={navigation} />
   }
-  if (user && profile) {
+  if (user && profile && socialPlatforms) {
     return <>
       <Head>
         <title>Edit Profile</title>
@@ -46,7 +52,7 @@ const ProfileEditPage: NextPage = () => {
         <link rel="icon" href="/white-logo.svg" />
       </Head>
       <Navbar image={user?.image} navigation={navigation} />
-      <EditProfile user={user} profile={profile} />
+      <EditProfile user={user} profile={profile} socialPlatforms={socialPlatforms} />
     </>
   }
   return <div>Something went wrong</div>
