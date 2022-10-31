@@ -8,7 +8,7 @@ export const UserProfileSlug: NextPage = ({ user, profile, cars }) => {
     { name: 'Team', href: '/team', current: false },
     { name: 'Projects', href: '/projects', current: false },
     { name: 'Gallery', href: '/gallery', current: false },
-    { name: 'Calendar', href: '/calendar', current: true },
+    { name: 'Calendar', href: '/calendar', current: false },
   ]
   return (
     <>
