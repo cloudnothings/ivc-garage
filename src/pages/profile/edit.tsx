@@ -32,7 +32,7 @@ const ProfileEditPage: NextPage = () => {
   })
 
   if (status === "loading") {
-    return <div>Loading...</div>
+    return <div className="text-white">Loading...</div>
   }
 
   if (status === "unauthenticated") {

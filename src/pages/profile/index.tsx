@@ -1,15 +1,49 @@
+import { Car, Profile, User } from "@prisma/client";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useState } from "react";
 import Navbar from "../../components/Navbar";
+import Unauthenticated from "../../components/Unauthenticated";
 import UserProfileBox from "../../components/UserProfileBox";
+import { trpc } from "../../utils/trpc";
 const ProfilePage: NextPage = () => {
-  const { data: sessionData, status } = useSession();
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
+  const [user, setUser] = useState<User>();
+  const { isError, isLoading } = trpc.user.getMyUser.useQuery(undefined, {
+    onSuccess: setUser,
+    refetchOnWindowFocus: false,
+  });
+
+  const [profile, setProfile] = useState<Profile>();
+  trpc.user.getMyProfile.useQuery(undefined, {
+    onSuccess: setProfile,
+    refetchOnWindowFocus: false,
+  });
+
+  const [cars, setCars] = useState<Car[]>([]);
+  trpc.user.getMyCars.useQuery(undefined, {
+    onSuccess: setCars,
+    refetchOnWindowFocus: false,
+  });
+
+  const [tabs, setTabs] = useState([{ id: 0, name: 'Profile', href: '#', current: true },
+  { id: 1, name: 'Cars', href: '#', current: false },
+  { id: 2, name: 'Gallery', href: '#', current: false }]);
+
+  const changeActiveTab = (id: number) => {
+    setTabs(tabs.map(tab => {
+      if (tab.id === id) {
+        return { ...tab, current: true }
+      } else {
+        return { ...tab, current: false }
+      }
+    }))
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'Team', href: '/team', current: false },
@@ -18,54 +52,23 @@ const ProfilePage: NextPage = () => {
     { name: 'Calendar', href: '/calendar', current: false },
   ]
 
-  if (status === "unauthenticated") {
-    return <Navbar navigation={navigation} />
+  if (isError) {
+    return <Unauthenticated navigation={navigation} />
   }
 
-  const tabs = [
-    { name: 'Profile', href: '#', current: true },
-    { name: 'Cars', href: '#', current: false },
-    { name: 'Gallery', href: '#', current: false },
-  ]
-  const profile = {
-    id: 1,
-    displayName: sessionData?.user?.name || '',
-    profilePicture: sessionData?.user?.image || 'jett.webp',
-    profileBanner: 'white-logo.svg',
-    about: 'Creator of this club and website',
-    publicEmail: 'carlos@rangel.us',
+  if (user && profile) {
+    return (
+      <>
+        <Head>
+          <title>My Profile</title>
+          <meta name="description" content="My Profile" />
+          <link rel="icon" href="/white-logo.svg" />
+        </Head>
+        <Navbar image={user?.image} navigation={navigation} />
+        <UserProfileBox tabs={tabs} cars={cars} profile={profile} user={user} setTabs={changeActiveTab} />
+      </>)
   }
-
-  const cars = [
-    {
-      id: 1,
-      nickname: 'Swift',
-      year: 2021,
-      make: 'Toyota',
-      model: 'Supra',
-      color: 'White',
-      image:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    }, {
-      id: 2,
-      nickname: 'Lightning McQueen',
-      year: 1999,
-      make: 'Toyota',
-      model: 'Supra',
-      color: 'Red',
-      image:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ]
-  return (<>
-    <Head>
-      <title>My Profile</title>
-      <meta name="description" content="My Profile" />
-      <link rel="icon" href="/white-logo.svg" />
-    </Head>
-    <Navbar image={sessionData?.user?.image} navigation={navigation} />
-    <UserProfileBox tabs={tabs} cars={cars} profile={profile} />
-  </>)
+  return <div>Something went wrong</div>
 }
 
 export default ProfilePage;

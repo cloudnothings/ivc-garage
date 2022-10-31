@@ -1,3 +1,4 @@
+import { SocialPlatforms, Car, Profile, User } from "@prisma/client"
 import Link from "next/link"
 
 function classNames(...classes: any[]) {
@@ -6,39 +7,15 @@ function classNames(...classes: any[]) {
 
 export interface UserProfileBoxProps {
   tabs: { name: string, href: string, current: boolean }[],
-  profile: {
-    id: number,
-    displayName: string,
-    profilePicture: string,
-    profileBanner: string,
-    publicEmail?: string,
-    about?: string,
-  },
-  socialPlatforms?: {
-    twitter?: string,
-    linkedin?: string,
-    github?: string,
-    instagram?: string,
-    tiktok?: string,
-    twitch?: string,
-    discord?: string,
-    youtube?: string,
-    spotify?: string,
-  },
-  cars?: {
-    id: number,
-    nickname?: string,
-    make: string,
-    model: string,
-    year: number,
-    color: string,
-    image: string,
-    description?: string,
-    carImages?: string[],
-  }[],
+  profile: Profile,
+  socialPlatforms?: SocialPlatforms,
+  cars?: Car[],
+  user?: User,
+  setTabs: (id: number) => void
 }
 
-export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars }: UserProfileBoxProps) => {
+export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars, user, setTabs }: UserProfileBoxProps) => {
+
   return (
     <>
       <div className="flex h-full">
@@ -49,26 +26,28 @@ export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars }: UserPro
                 {/* Profile header */}
                 <div>
                   <div>
-                    <img className="h-32 w-full object-cover lg:h-48" src={profile.profileBanner} alt="" />
+                    <img className="h-32 w-full object-cover lg:h-48" src={profile?.profileBanner || ''} alt="" />
                   </div>
                   <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                     <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                       <div className="flex">
                         <img
                           className="h-24 w-24 rounded-full ring-4 ring-black sm:h-32 sm:w-32"
-                          src={profile.profilePicture}
+                          src={user?.profilePicture || user?.image || 'jett.webp'}
                           alt=""
                         />
                       </div>
                       <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                         <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
-                          <h1 className="truncate text-2xl font-bold text-white">{profile.displayName}</h1>
+                          <h1 className="truncate text-2xl font-bold text-white">{profile?.displayName || user?.name}</h1>
                         </div>
-                        <SocialPlatformButtons socialPlatforms={socialPlatforms} />
+                        {socialPlatforms && (
+                          <SocialPlatformButtons socialPlatforms={socialPlatforms} />
+                        )}
                       </div>
                     </div>
                     <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                      <h1 className="truncate text-2xl font-bold text-white">{profile.displayName}</h1>
+                      <h1 className="truncate text-2xl font-bold text-white">{profile?.displayName || user?.name}</h1>
                     </div>
                   </div>
                 </div>
@@ -80,6 +59,7 @@ export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars }: UserPro
                         <a
                           key={tab.name}
                           href={tab.href}
+                          onClick={() => setTabs(tabs.indexOf(tab))}
                           className={classNames(
                             tab.current
                               ? 'border-white text-white'
@@ -94,18 +74,29 @@ export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars }: UserPro
                     </nav>
                   </div>
                 </div>
-                {/* Description list */}
-                <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                  {profile.about && (
-                    <>
-                      <div className="text-white font-medium text-md">About</div>
-                      <div className="font-medium text-[#999999]">{profile.about}</div>
-                    </>)}
-                </div>
-                {/* Pinned Builds list */}
-                <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
-                  <BuildCards cars={cars} />
-                </div>
+                {tabs[0]?.current && (<>
+                  <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                    {profile.about && (
+                      <>
+                        <div className="text-white font-medium text-md">About</div>
+                        <div className="font-medium text-[#999999]">{profile.about}</div>
+                      </>)}
+                  </div>
+                  {cars && cars.length > 0 && (
+                    <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
+                      <BuildCards cars={cars} />
+                    </div>
+                  )}
+                </>
+                )}
+                {tabs[1]?.current && (<>
+                  <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8"></div>
+                </>
+                )}
+                {tabs[2]?.current && (<>
+                  <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8"></div>
+                </>
+                )}
               </article>
             </main>
           </div>
@@ -116,17 +107,7 @@ export const UserProfileBox = ({ tabs, profile, socialPlatforms, cars }: UserPro
 }
 
 export interface BuildCardsProps {
-  cars?: {
-    id: number,
-    nickname?: string,
-    make: string,
-    model: string,
-    year: number,
-    color: string,
-    image: string,
-    description?: string,
-    carImages?: string[],
-  }[],
+  cars?: Car[]
 }
 
 export const BuildCards = ({ cars }: BuildCardsProps) => {
@@ -149,17 +130,7 @@ export const BuildCards = ({ cars }: BuildCardsProps) => {
 }
 
 export interface SocialPlatformButtonProps {
-  socialPlatforms?: {
-    twitter?: string,
-    linkedin?: string,
-    github?: string,
-    instagram?: string,
-    tiktok?: string,
-    twitch?: string,
-    discord?: string,
-    youtube?: string,
-    spotify?: string,
-  },
+  socialPlatforms?: SocialPlatforms
 }
 
 export const SocialPlatformButtons = ({ socialPlatforms }: SocialPlatformButtonProps) => {

@@ -55,7 +55,7 @@ model Profile {
   allowMentions  Boolean @default(true)
   allowComments  Boolean @default(true)
   privateProfile Boolean @default(false)
-  profileBanner  String?
+  profileBanner  String  @default("white-logo.svg")
   about          String?
   publicEmail    String?
   user           User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -64,15 +64,15 @@ model Profile {
 
 model Car {
   id          Int        @id @default(autoincrement())
-  user        User       @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail   String     @unique // relation scalar field (used in the `@relation` attribute above)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
   primary     Boolean    @default(false)
   nickname    String?
   make        String?
   model       String?
   year        Int?
   color       String?
-  image       String?
+  image       String     @default("default-car.webp")
   description String?
   CarImage    CarImage[]
 }
@@ -90,6 +90,7 @@ model SocialPlatforms {
   user      User    @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail String  @unique // relation scalar field (used in the `@relation` attribute above)
   twitter   String?
+  discord   String?
   instagram String?
   linkedin  String?
   github    String?

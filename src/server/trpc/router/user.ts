@@ -29,6 +29,13 @@ export const userRouter = router({
       }
     });
   }),
+  getMyCars: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.car.findMany({
+      where: {
+        userId: ctx.session.user.id
+      }
+    });
+  }),
   editProfile: protectedProcedure
     .input(z.object({
       slug: z.string().optional(),
