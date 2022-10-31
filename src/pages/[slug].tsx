@@ -1,8 +1,9 @@
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 
-export const UserProfileSlug: NextPage = ({ user, profile, cars }) => {
+export const UserProfileSlug: NextPage = ({ }) => {
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'Team', href: '/team', current: false },
@@ -10,14 +11,16 @@ export const UserProfileSlug: NextPage = ({ user, profile, cars }) => {
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: false },
   ]
+  const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
-        <title>{user.name}</title>
+        <title>{'beta'}</title>
         <meta name="description" content="User profile" />
         <link rel="icon" href="/white-logo.svg" />
       </Head>
-      <Navbar image={user.image} navigation={navigation} />
+      <Navbar image={sessionData?.user?.image} navigation={navigation} />
     </>
   );
 }
