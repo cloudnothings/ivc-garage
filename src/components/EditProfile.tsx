@@ -86,13 +86,11 @@ export default function EditProfile({ user, profile, socialPlatforms }: EditProf
   // Edit Social Media Accounts ////////////////////////////////
   const [twitter, setTwitter] = useState<string>(socialPlatforms?.twitter || '')
   const [instagram, setInstagram] = useState<string>(socialPlatforms?.instagram || '')
-  const [discord, setDiscord] = useState<string>(socialPlatforms?.discord || '')
   const [youtube, setYoutube] = useState<string>(socialPlatforms?.youtube || '')
   const [twitch, setTwitch] = useState<string>(socialPlatforms?.twitch || '')
   const [tiktok, setTiktok] = useState<string>(socialPlatforms?.tiktok || '')
   const [linkedin, setLinkedin] = useState<string>(socialPlatforms?.linkedin || '')
   const [github, setGithub] = useState<string>(socialPlatforms?.github || '')
-  const [spotify, setSpotify] = useState<string>(socialPlatforms?.spotify || '')
 
   const editSocialPlatformsMutator = trpc.user.editSocialPlatforms.useMutation()
   const editSocialPlatformsSubmitHandler = () => {
@@ -104,7 +102,6 @@ export default function EditProfile({ user, profile, socialPlatforms }: EditProf
       tiktok: tiktok,
       linkedin: linkedin,
       github: github,
-      spotify: spotify,
     }
     )
   }
