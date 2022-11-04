@@ -36,6 +36,15 @@ export const userRouter = router({
       },
     });
   }),
+  getSocials: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.socialPlatforms.findFirst({
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
   getMyCars: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.car.findMany({
       where: {
@@ -43,6 +52,15 @@ export const userRouter = router({
       },
     });
   }),
+  getCars: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.car.findMany({
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
   getMyDiscordId: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.account
       .findFirst({
@@ -56,6 +74,25 @@ export const userRouter = router({
       })
       .then((account) => account?.providerAccountId);
   }),
+  getDiscordId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.account
+        .findFirst({
+          where: {
+            provider: "discord",
+            userId: input.userId,
+          },
+          select: {
+            providerAccountId: true,
+          },
+        })
+        .then((account) => account?.providerAccountId);
+    }),
   editSocialPlatforms: protectedProcedure
     .input(
       z.object({
@@ -118,6 +155,39 @@ export const userRouter = router({
               privateProfile: input.profile.privateProfile,
               allowMentions: input.profile.allowMentions,
               allowComments: input.profile.allowComments,
+            },
+          },
+        },
+      });
+    }),
+  getProfile: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.profile.findFirst({
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
+  visitProfile: publicProcedure
+    .input(
+      z.object({
+        slug: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findFirst({
+        where: {
+          slug: input.slug,
+        },
+        include: {
+          profile: {
+            select: {
+              privateProfile: true,
             },
           },
         },
