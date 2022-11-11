@@ -12,14 +12,16 @@ const Team: NextPage = () => {
     { name: 'Projects', href: '/projects', current: false },
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: false },
+    { name: 'Community', href: '/community', current: false },
   ]
 
   return (
-    <><Head>
-      <title>IVC Garage Team</title>
-      <meta name="description" content="IVC Garage Team" />
-      <link rel="icon" href="/white-logo.svg" />
-    </Head>
+    <>
+      <Head>
+        <title>IVC Garage Team</title>
+        <meta name="description" content="IVC Garage Team" />
+        <link rel="icon" href="/white-logo.svg" />
+      </Head>
       <Navbar image={sessionData?.user?.image} navigation={navigation} />
       <section className="py-8 bg-black overflow-hidden">
         <div className="container px-4 mx-auto">

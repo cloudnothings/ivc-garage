@@ -81,6 +81,7 @@ export const UserProfileSlug: NextPage = () => {
     { name: 'Projects', href: '/projects', current: false },
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: false },
+    { name: 'Community', href: '/community', current: false },
   ]
   const { data: sessionData } = useSession();
   if (userLoading) {

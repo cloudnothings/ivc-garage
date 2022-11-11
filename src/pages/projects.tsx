@@ -11,6 +11,7 @@ export const ProjectsPage: NextPage = () => {
     { name: 'Projects', href: '/projects', current: true },
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: false },
+    { name: 'Community', href: '/community', current: false },
   ]
 
   return (

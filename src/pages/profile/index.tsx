@@ -9,7 +9,7 @@ import { trpc } from "../../utils/trpc";
 const ProfilePage: NextPage = () => {
 
   const [user, setUser] = useState<User>();
-  const { isError, isLoading } = trpc.user.getMyUser.useQuery(undefined, {
+  const { isError } = trpc.user.getMyUser.useQuery(undefined, {
     onSuccess: setUser,
     refetchOnWindowFocus: false,
   });
@@ -52,15 +52,13 @@ const ProfilePage: NextPage = () => {
     }))
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'Team', href: '/team', current: false },
     { name: 'Projects', href: '/projects', current: false },
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: false },
+    { name: 'Community', href: '/community', current: false },
   ]
 
   if (isError) {
@@ -79,7 +77,7 @@ const ProfilePage: NextPage = () => {
         <UserProfileBox tabs={tabs} cars={cars} profile={profile} user={user} setTabs={changeActiveTab} socialPlatforms={socialPlatforms} discordId={discord} />
       </>)
   }
-  return <div>Something went wrong</div>
+  return <div className="text-white">Something went wrong</div>
 }
 
 export default ProfilePage;

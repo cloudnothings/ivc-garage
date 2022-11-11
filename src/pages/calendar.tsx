@@ -11,6 +11,7 @@ const CalendarPage: NextPage = () => {
     { name: 'Projects', href: '/projects', current: false },
     { name: 'Gallery', href: '/gallery', current: false },
     { name: 'Calendar', href: '/calendar', current: true },
+    { name: 'Community', href: '/community', current: false },
   ]
 
   return (
